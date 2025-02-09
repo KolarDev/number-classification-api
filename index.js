@@ -79,12 +79,13 @@ app.get("/api/v1/classify-number", async (req, res) => {
   if (isArmstrong(num)) properties.push("armstrong");
   properties.push(num % 2 === 0 ? "even" : "odd");
 
-  const funFact = await getFunFact(num);
+  // const funFact = await getFunFact(num);
+  const [funFact, isPrimeResult, isPerfectResult] = await Promise.all([getFunFact(num), Promise.resolve(isPrime(num)), Promise.resolve(isPerfect(num))]);
 
   res.status(200).json({
     number: num,
-    is_prime: isPrime(num),
-    is_perfect: isPerfect(num),
+    is_prime: isPrimeResult,
+    is_perfect: isPerfectResult,
     properties,
     digit_sum: sumDigits(num),
     fun_fact: funFact,
